@@ -1,0 +1,43 @@
+.App {
+  text-align: center;
+}
+
+.Fish {
+
+}
+
+.Fish-title {
+  background: black;
+  color: white;
+  padding: 0.5em;
+  margin: 0;
+}
+
+.Fish-content {
+  padding: 1em;
+  background: #afabab;
+  text-align: left;
+}
+
+.Menu {
+  height: 3em;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.correct {
+  background: #afda64;
+  font-size: 2em;
+
+}
+
+.items-left {
+  font-size: 2em;
+  padding: 0px 20px;
+}
+
+.incorrect {
+  font-size: 2em;
+  background: #da8564;
+}

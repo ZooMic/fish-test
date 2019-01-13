@@ -131,5 +131,65 @@ export default [
                 <b>3. Mgła wykładnicza</b> - W działaniu przypomina ona efekty uzyskiwane za pomocą tablicy mgieł. Jednak w tym przypadku nie wymaga się predefiniowania stopni zamglenia, które obliczane są na bieżąco na podstawie zaprogramowanej funkcji wykładniczej.<br/>
                 <b>4. Mgła wolumetryczna</b> - wykorzystywane są półprzezroczyste tekstury trójwymiarowe. Mgła zbudowana jest z warstw o różnej gęstości, co pozwala na wyjątkowo realne odwzorowanie otaczającego nas świata.
             </Fragment>
+    }, {
+        title: '14. Rasteryzacja',
+        content:
+            <Fragment>
+                Etap zamiany wszystkich parametrów generowanej sceny na zbiór pikseli gotowych do wysłania na monitor. Wykonuje go specjalizowany moduł znajdujący się wewnątrz każdego, nawet najprostszego układu graficznego, nazywany jednostką rasteryzującą. Każdemu punktowi sceny przyporządkowane są trzy współrzędne: x, y, z. Przeniesienie dwóch pierwszych wartości na obraz dwuwymiarowy nie stanowi problemu. Współrzędna "z" określa zaś odległość obiektu od płaszczyzny ekranu. W większości programów wykorzystuje się 16-bitową głębię, która umożliwia odwzorowanie 65 536 pozycji obiektu. W aplikacjach inżynierskich oraz przy tworzeniu profesjonalnej grafiki używa się 24 – lub nawet 32 – bitowej głębi.<br/>
+                Najważniejszymi technikami towarzyszącymi rasteryzacji są:<br/>
+                - bufor głębokości, tzw. z – bufor<br/>
+                - bufor szablonowy<br/>
+                - antyaliasing<br/>
+                - dithering
+            </Fragment>
+    }, {
+        title: '15. Z-bufor',
+        content:
+            <Fragment>
+                Oprócz bufora ramki w którym przechowywane są wyniki rasteryzacji, w pamięci RAM karty graficznej wydzielona zostaje również matryca odpowiadająca swoją wielkością rozdzielczości ekranu, a głębokością 16, 24 lub 32 bitom, w zależności od zastosowanej głębi współrzędnej "z". Zasada działania polega na tym, że np. dla dwóch trójkątów przed ich narysowaniem porównuje się ich współrzędne "z" z wartością zapamiętaną w z-buforze. Jeśli nowy rysowany punkt ma wartość niższą (to znaczy zasłania poprzedni obiekt), jest rysowany. Cały proces powtarzany jest dla każdego obiektu generowanej sceny 3D.
+            </Fragment>
+    }, {
+        title: '16. Bufor szablonowy',
+        content:
+            <Fragment>
+                Akcelerator renderuje grafikę tylko w miejscu nie zakrytym przez szablon. A następnie scala się obraz z szablonem. Większość układów graficznych dysponuje 8 bitowym buforem szablonowym. Dzięki nim można uzyskać dodatkowe efekty, jak:<br/>
+                - ślady po hamowaniu samochodu,<br/>
+                - plamy oleju na jezdni czy<br/>
+                - tzw. cienie wolumetryczne (ang. volumetric shadow) dokładnie odwzorowujące kształt rzucających je przedmiotów.
+            </Fragment>
+    }, {
+        title: '17. Antialiasing',
+        content:
+            <Fragment>
+                Stosowany w celu pozbycia się efektu schodkowatości wynikającej z ograniczonej rozdzielczości ekranu.<br/>
+                Można wyróżnić dwa główne typy antyaliasingu:<br/>
+                <b>- krawędziowy</b> - polega na odpowiednim rozmywaniu krawędzi wzdłuż rysowanej linii czy granicy kolorów. W większości wypadków nie wygładza się wszystkich widocznych na ekranie linii, lecz tylko tę część z nich, która najbardziej wpływa na wygląd generowanej sceny.<br/>
+                <b>- pełnoekranowy</b> - Niektóre procesory graficzne przetwarzają każdą klatkę w dwukrotnym powiększeniu, a następnie przeskalowują ją do żądanej wielkości. Inne karty używają bufora akumulacyjnego, tzw. T-bufora. Umieszczane są w nim dwie lub cztery identyczne ramki obrazu, każda z nich jest minimalnie przesuwana względem pozostałych po czym następuje ich zlanie w jeden obraz. Stosowanie tej metody powoduje jednak, że w odróżnieniu od antyaliasingu krawędziowego cały obraz na ekranie monitora pozbawiony jest schodków.
+            </Fragment>
+    }, {
+        title: '18. Dithering',
+        content:
+            <Fragment>
+                Proces polegający na symulacji niedostępnego w systemie koloru poprzez kompozycję kilku zbliżonych do niego barw z dostępnej palety. Może doprowadzić do obniżenia jakości wyświetlanego obrazu, efektu - ziarnistości.
+            </Fragment>
+    }, {
+        title: '19. Charakterystyka OpenGL',
+        content:
+            <Fragment>
+                Pierwszym etapem pracy z OpenGL jest inicjalizacja która odbywa się poprzez stworzenie kontekstu, który przechowuje wszystkie dane związane z wyświetlaniem aplikacji. Zarządzanie oknami systemu nie są częścią specyfikacji OpenGL, ze względu na to stosuje się inne zewnętrzne biblioteki które umożliwiają integracje. Zazwyczaj biblioteki umożliwiają pewien określony przebieg programu:<br/>
+                1. Określenie właściwości okna renderingu (tytuł, właściwości kontekstu OpenGL)<br/>
+                2. Inicjalizacja pętli zdarzeń w której realizowane będą takie zadanie jak:<br/>
+                - obsługa kliknięcia myszką czy klawiszy klawiatury,<br/>
+                - aktualizacja stanu renderingu,<br/>
+                - aktualizacja rysunku,<br/>
+                Podczas renderowania ramki, wyniki zostają zapisane w buforze znanym jako tylny, którego zawartość nie podlega wyświetlaniu. Odpowiednia funkcja powoduje przepisanie zawartości do bufora przedniego, którego zawartość jest wyświetlana w oknie renderingu,<br/>
+            </Fragment>
     }
+    // , {
+    //     title: '20. Modele barw',
+    //     content:
+    //         <Fragment>
+
+    //         </Fragment>
+    // }
 ]

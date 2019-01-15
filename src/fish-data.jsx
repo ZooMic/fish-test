@@ -1,4 +1,9 @@
 import React, { Fragment } from 'react';
+import img22 from './img/22.png';
+import img25_1 from './img/25-1.png';
+import img25_2 from './img/25-2.png';
+import img25_3 from './img/25-3.png';
+import img28 from './img/28.png';
 
 export default [
     {
@@ -79,8 +84,8 @@ export default [
         title: '9. Korekcja perspektywy',
         content:
             <Fragment>
-                Podczas odwzorowania często występują problemy z zachowaniem odpowiedniej perspektywy. Dotyczy to: dużych trójkątów z nałożonymi teksturami (np. ściany, sufity lub podłogi) lub znajdujących się niemal prostopadle do płaszczyzny ekranu. Elementy sceny rozjeżdżają się, dając dziwne powykrzywiane wzory spowodowane załamywaniem się tekstur lub ich znikaniem (np. w scenach z długim tunelem). Błąd ten wynika ze złej metody uwzględnienia położenia wielokąta w przestrzeni.<br/>
-                W celu wyeliminowania tych niepożądanych efektów stosuje się algorytmy korekcji perspektywy (ang. perspective correction). Metoda ta polega na:<br/>
+                Problem z odwzorowaniem perspektywy dotyczy głownie: dużych trójkątów (ściany, sufity, podłogi) lub trójkąty znajdujące się niemal prostopadle do płaszczyzny ekranu.<br/>
+                W celu wyeliminowania tych niepożądanych efektów stosuje się algorytmy korekcji perspektywy. Metoda ta polega na:<br/>
                 a) Stworzeniu wirtualnego punktu w nieskończoności.<br/>
                 b) Następnie każda linia poprowadzona z dowolnego miejsca obrazu musi zbiec się w owym punkcie.<br/>
                 c) Dopiero wówczas akcelerator, zgodnie z zasadą rzutu perspektywicznego, nakłada tekstury już bez tych niechcianych deformacji.
@@ -112,15 +117,6 @@ export default [
                 Praktycznie wszystkie nowoczesne akceleratory potrafią obsługiwać 32 bitowy kolor. Jak wiadomo do przedstawienia pełnej palety barw wystarczą 24 bity. Brakujące osiem bitów to właśnie kanał alfa, a tekstury takie nazywane są RGBA. Trzy kolory składowe oraz kanał alfa.<br/>
             </Fragment>
     }, {
-        title: '12. Cieniowanie',
-        content:
-            <Fragment>
-                Drugi etap generowania trójwymiarowego obrazu nazywa się cieniowaniem (ang. shading). Niektórzy używają tego pojęcia dla całości procesu, ale to dwa oddzielne typy algorytmów.<br/>
-                Najważniejsze metody cieniowania to:<br/>
-                <b>- Cieniowanie płaskie</b> - Polega ono na przyporządkowaniu całej powierzchni trójkąta jednego poziomu jasności. Dodatkowo uwzględnia barwy w przypadku gdy na scenie, rozstawione są kolorowe źródła światła. Poziom jasności i barwa są określane przez jeden z jego wierzchołków – zazwyczaj przez znajdujący się najbliżej obserwatora. Oznacza to, że każdemu trójkątowi przypisuje się jeden ściśle określony odcień, niezależnie od otaczających go wielokątów. Zakłada się wtedy również rozproszone odbicie światła. Niestety, rezultaty cieniowania płaskiego nie są zadowalające, gdyż szczególnie na okrągłych przedmiotach (np. kulach) uzyskuje się efekt kanciastości obiektów, wynikający z gwałtownych zmian jasności przylegających do siebie trójkątów.<br/>
-                <b>- Cieniowanie interpolacyjne Gourauda</b> - zakłada, iż pojedynczy odcień wnętrza każdego trójkąta powstaje z interpolacji: kolorów świateł, natężenia światła występujących w każdym z jego wierzchołków. Przy okazji uwzględniona zostaje w pewnym zakresie jasność sąsiednich wielokątów. W metodzie tej wnętrzu trójkąta przypisuje się nie jeden, ale kilka różnych poziomów jasności. Otrzymane są one przez interpolację natężenia światła wzdłuż linii przechodzącej przez trójkąt i biegnącej od obserwatora do punktu w nieskończoności. Zakłada zwierciadlane odbicie światła. Wreszcie, każdy wielokąt jest cieniowany na zasadzie: interpolacji liniowej między wierzchołkami wzdłuż każdej krawędzi, a potem między krawędziami wzdłuż każdego przeglądanego wiersza w sposób przedstawiony równaniami z prawej strony rysunku. Określenie cieniowanie Gourauda jest często uogólniane na: cieniowanie metodą interpolacji jasności jednego wielokąta albo na interpolację dowolnych barw związanych z wierzchołkami wielokąta. W ten sposób zostają zachowane płynne przejścia poziomów jasności pomiędzy poszczególnymi wielokątami. Nie ma przylegających do siebie obszarów o drastycznie różnych poziomach natężenia światła. Co ciekawe, cieniowanie Gourauda wywołuje złudzenie gładkości sferycznych obiektów złożonych nawet z niewielkiej liczby trójkątów<br/>
-                <b>- cieniowanie Phong’a</b> - nazywane też techniką per-pixel lighting. W metodzie tej kolor i natężenie światła przyporządkowywane są oddzielnie do każdego punktu sceny 3D - piksela obrazu. W metodzie tej interpolacji podlega wektor normalny do powierzchni na podstawie normalnych wektorów węzłowych. Jasność wewnątrz trójkąta może się zatem wyraźnie różnić od wartości węzłowych. Cieniowanie Phonga z krzywoliniową interpolacją kształtu obiektów - często w celu poprawienia wyglądu sceny stosuje się prymitywy krzywoliniowe – np. bikubiczne płaty powierzchni – metodę modelowania niektórych powierzchni.            </Fragment>
-    }, {
         title: '13. Efekty specjalne',
         content:
             <Fragment>
@@ -143,10 +139,12 @@ export default [
                 - dithering
             </Fragment>
     }, {
-        title: '15. Z-bufor',
+        title: '15. Bufor Z',
         content:
             <Fragment>
-                Oprócz bufora ramki w którym przechowywane są wyniki rasteryzacji, w pamięci RAM karty graficznej wydzielona zostaje również matryca odpowiadająca swoją wielkością rozdzielczości ekranu, a głębokością 16, 24 lub 32 bitom, w zależności od zastosowanej głębi współrzędnej "z". Zasada działania polega na tym, że np. dla dwóch trójkątów przed ich narysowaniem porównuje się ich współrzędne "z" z wartością zapamiętaną w z-buforze. Jeśli nowy rysowany punkt ma wartość niższą (to znaczy zasłania poprzedni obiekt), jest rysowany. Cały proces powtarzany jest dla każdego obiektu generowanej sceny 3D.
+                Struktura danych wykorzystywana w systemach generujących i wyświetlających obrazy trójwymiarowe, przechowująca współrzędną Z (głębokość/odległość od obserwatora) dla każdego piksela.<br/>
+                Jest to matryca odpowiadająca swoją wielkością rozdzielczości ekranu, a głębokością 16, 24 lub 32 bitom, w zależności od zastosowanej głębi współrzędnej "z".<br/>
+                Jeśli nowy rysowany punkt ma wartość niższą (to znaczy zasłania poprzedni obiekt), jest rysowany.
             </Fragment>
     }, {
         title: '16. Bufor szablonowy',
@@ -184,12 +182,146 @@ export default [
                 - aktualizacja rysunku,<br/>
                 Podczas renderowania ramki, wyniki zostają zapisane w buforze znanym jako tylny, którego zawartość nie podlega wyświetlaniu. Odpowiednia funkcja powoduje przepisanie zawartości do bufora przedniego, którego zawartość jest wyświetlana w oknie renderingu,<br/>
             </Fragment>
+    }, {
+        title: '20. Modele barw (reprezentacja kolorów)',
+        content:
+            <Fragment>
+                <b>CIE xyY</b> - powstała aby umożliwić opis współrzędnych trójchromatycznych CIE XYZ w przestrzeni 2D, z X, Y, Z przeliczone są współrzędne x, y, Y gdzie x i y określają chromatyczność a Y jasność.<br/>
+                <b>Lab</b> - trójwymiarowy system koordynat. Oś a przedstawia udział barwy zielonej (ujemna) lub czerwonej(dodatnia). Oś b udział barwy niebieskiej(ujemna) lub żółtej(dodatnia). Oś L opisuje procentowo jasność barwy.<br/>
+                <b>HSB</b> - przestrzeń barw złożona z 3 składowych H (hue - barwa), S (saturation - nasycenie), B (brightness - jasność). B opisywane jest na kole barw (może przyjąć wartość 0 - 360), pozostałe od 0 - 100.<br/>
+                <b>RGB</b> - kolor opisany jest poprzez 3 wartośći R, G oraz B. Jest to model addytywny - suma wszystkich barw o najwyższej wartości daje kolor biały.<br/>
+                <b>CMYK</b> - jest modelem subtraktywnym (suma barw daje kolor czarny, różnica daje biały)<br/>
+                <b>YUV</b> -  model barw, w którym Y odpowiada za jasność obrazu (luminancję), a UV kodują barwę – są to dwa kanały chrominancji.<br/>
+                <b>Przestrzeń kolorów Musella</b> - ma trzy wymiary: barwa (hue), nasycenie (chroma) i jasność (value). Munsell wyznaczył pięć barw głównych: czerwoną (R), żółtą (Y), zieloną (G), niebieską (B) i purpurową (P), oraz pięć barw pośrednich: czerwono-żółtą (RY), żółto-zieloną (YG), zielono-niebieską (GB), niebiesko-purpurową (BP) i purpurowo-czerwoną (PR).
+            </Fragment>
+    }, {
+        title: '21. Oświetlenie',
+        content:
+            <Fragment>
+                Rodzaje świateł:<br/>
+                <b>- punktowe.</b><br/>
+                <b>- rozproszone.</b><br/>
+                <b>- ruchome.</b><br/><br/>
+                <b>Algorytm Phonga</b> - model oświetlenia służący do modelowania odbić zwierciadlanych. Oparty na śledzeniu promieni. Na natężenie światła docierające do obserwatora składa się (światło odbite, światło rozproszone, światło otoczenia).<br/>
+                <b>Algorytm Laberta</b> - model oświetlenia powierzchni matowych przez światło punktowe.
+            </Fragment>
+    }, {
+        title: '22. Rzutowanie',
+        content:
+            <Fragment>
+                <img src={img22} alt="22.png"/>
+            </Fragment>
+    }, {
+        title: '23. Rachunek wektorowy',
+        content:
+            <Fragment>
+                Wykorzystanie wektorów w grafice komputerowej:<br/>
+                - określenie współrzędnych punktów orientacji w przestrzeni<br/>
+                - opis zachowania światła (odbicia)<br/>
+                - opis ruchu<br/>
+                - pozycja obserwatora i inne.<br/>
+                Wektor jest uporządkowanym zbiorem liczb. Operacje na wektorach (suma, iloczyn skalarny, iloczyn wektorowy).
+            </Fragment>
+    }, {
+        title: '24. Rachunek macierzowy',
+        content:
+            <Fragment>
+                Wykorzystanie macierzy w grafice<br/>
+                - operacje na punktach<br/>
+                - operacje na wektorach<br/>
+                - przekształcenia geometryczne<br/>
+                - rzutowanie<br/>
+                - opis krzywych<br/>
+                - opis powierzchni
+            </Fragment>
+    }, {
+        title: '25. Przekształcenia geometryczne 2D i 3D',
+        content:
+            <Fragment>
+                <img src={img25_1} alt="translacja" />
+                <img src={img25_2} alt="skalowanie" />
+                <img src={img25_3} alt="rotacja" />
+            </Fragment>
+    }, {
+        title: '26. Stereoskopia',
+        content:
+            <Fragment>
+                Technika obrazowania oddająca wrażenie normalnego widzenia stereoskopowego, to znaczy odwzorowująca nie tylko kształt i kolor obiektów, ale także ich wzajemne zależności przestrzenne, odległość od obserwatora i głębie sceny.<br/>
+                Wymaga dostarczenia do mózgu dwóch obrazów, widzianych z perspektywy lewego i prawego oka. W tym celu wykonuje się parę zwykłych dwuwymiarowych obrazów (stereoparę), reprezentujących obiekt lub scenę z dwóch punktów widzenia, oddalonych tak jak oczy obserwatora. Obrazy składowe stereopary są bardzo podobne, ale różnią się nieco kątem widzenia obiektów i szczegółami wzajemnego przesłaniania się obiektów w scenie. To właśnie te drobne różnice niosą informację o trzecim wymiarze.<br/>
+                Sposoby odwzorowania trzeciego wymiaru:<br/>
+                - łączenie obrazu w stereopary i oglądanie przez dwie soczewki,<br/>
+                - metoda anaglifowa - obrazy nałożone na siebie (zabarwione na czerwono i niebiesko), przy oglądaniu przez okulary o tak samo zabarwionych szkłach następuje separacja obrazów i pojawia się efekt przestrzenny.<br/>
+                - metoda migawkowa - obrazy są wyświetlane przemiennie, oglądane przez okulary o szkłach ciekłokrystalicznych odłaniają na przemian lewe i prawe oko,<br/>
+                - filtry polaryzacyjne - stosowane na ekranach, kierunki polaryzacji są ustawione prostopadle a widzowie oglądają obraz z filtrami dostosowanymi dla każdego oka.
+            </Fragment>
+    }, {
+        title: '28. Krzywe parametryczne',
+        content:
+            <Fragment>
+                <img src={img28} alt="28" />
+            </Fragment>
+    }, {
+        title: '29. Silniki graficzne',
+        content:
+            <Fragment>
+                Część kodu aplikacji odpowiedzialna za tworzenie grafiki 2D, 2,5D lub 3D, która następnie widoczna będzie na urządzeniu wyświetlającym obraz. Zawiera on elementy konieczne do wykonywania złożonych matematycznych obliczeń i przekształceń elementów grafiki.<br/>
+                Silnik graficzny zajmuje się renderowaniem programowym bądź sprzętowym obrazu w czasie rzeczywistym na typowym ekranie komputera. W przypadku grafiki trójwymiarowej oznacza to, że każda klatka obrazu musi zostać wygenerowana na tyle szybko, aby możliwe było swobodne „poruszanie się” po trójwymiarowym świecie wirtualnym. Silniki graficzne do generowania obrazu trójwymiarowego są czasami nazywane silnikami 3D. Do przyśpieszenia i wykonywania bardziej złożonych obliczeń mogą wykorzystywać wsparcie sprzętowe specjalizowanych procesorów graficznych oraz obsługujących je bibliotek graficznych, takich jak DirectX, OpenGL czy Vulkan.
+            </Fragment>
+    }, {
+        title: '30. Techniki generowania cieni',
+        content:
+            <Fragment>
+                <b>Cieniowanie płaskie</b> - jest najprostszą metodą cieniowania. Polega ono na przyporządkowaniu całej powierzchni trójkąta jednego poziomu jasności. Dodatkowo uwzględnia barwy w przypadku gdy na scenie, rozstawione są kolorowe źródła światła. Poziom jasności i barwa są określane przez jeden z jego wierzchołków – zazwyczaj przez znajdujący się najbliżej obserwatora.<br/>
+                <b>Cieniowanie Gourada</b> - zakłada, iż pojedynczy odcień wnętrza każdego trójkąta powstaje z interpolacji: (kolorów świateł, natężenia światła występujących w każdym z jego wierzchołków). Przy okazji uwzględniona zostaje w pewnym zakresie jasność sąsiednich wielokątów. W metodzie tej wnętrzu trójkąta przypisuje się nie jeden, ale kilka różnych poziomów jasności. Otrzymane są one przez interpolacje natężenia światła wzdłuż linii przechodzącej przez trójkąt i biegnącej od obserwatora do punktu w nieskończoności. Zakłada zwierciadlane odbicie światła.<br/>
+                <b>Cieniowanie Phonga</b> - W metodzie tej kolor i natężenie światła przyporządkowywane są oddzielnie do każdego punktu sceny 3D - piksela obrazu. W metodzie tej interpolacji podlega wektor normalny do powierzchni na podstawie normalnych wektorów węzłowych. Jasność wewnątrz trójkąta może się zatem wyraźnie różnić od wartości węzłowych.
+            </Fragment>
+    }, {
+        title: '31. Potok graficzny OpenGL z zastosowaniem shaderów',
+        content:
+            <Fragment>
+                Tworzenie obrazu przy użyciu OpenGL zaczyna się od:<br/>
+                a) Utworzenia zbioru wierzchołków (ang. vertex). Każdy z tych punktów jest przechowywany z pewnymi atrybutami i to do programisty należy decyzja, jakie cechy należy przechowywać. Powszechnie stosowane są atrybuty pozycji 3D we współrzędnych świata oraz współrzędne tekstury. Wierzchołki są danymi wejściowymi shadera wierzchołków - części oprogramowania sprzętowego karty graficznej. Shader wierzchołków to miejsce, gdzie odbywa się przekształcanie pozycji wierzchołków: z trójwymiarowego układu współrzędnych świata do znormalizowanego układu urządzenia NDC.<br/>
+                b) Z tak przekształconych wierzchołków karta graficzna będzie tworzyć trójkąty, linie lub punkty w procesie zwanym shape assembly. Utworzone prymitywy stanowią podstawę złożonych kształtów. Do wyboru jest kilka dodatkowych trybów rysowania, takich jak: pasma trójkątów (ang. triangle strips ), i linii (ang.line strips )<br/>
+                c) Kolejnym krokiem przetwarzania strumienia grafiki jest shader geometrii (ang. geometry shader ), który jest całkowicie opcjonalny i został wprowadzony do użytku dopiero niedawno. Wejściowe prymitywy z etapu shape assembly mogą być:<br/>
+                - przekazywane dalej w dół strumienia grafiki bez zmian,<br/>
+                - modyfikowane przed przekazaniem,<br/>
+                - w całości odrzucone,<br/>
+                - zastąpione innymi prymitywnymi.<br/>
+                Po tym, jak ostateczna lista kształtów jest kompletna i dostosowana do współrzędnych ekranu, rasteryzator konwertuje widoczne elementy kształtów na zbiór fragmentów wielkości piksela.<br/>
+                d) Atrybuty wierzchołków pochodzące z shadera wierzchołków lub shadera geometrii są interpolowane dla każdego fragmentu i przekazywane jako dane wejściowe do shadera fragmentów . Shader fragmentów przetwarza pojedynczo kazdy fragment wraz z jego interpolowanymi atrybutami i okresla jego ostateczny kolor poprzez:<br/>
+                - pobranie próbki z tekstury zaczepionej w wierzchołkach lub<br/>
+                - proste przekazanie koloru fragmentu<br/>
+                e) Ostatecznie, efekt końcowy jest budowany ze wszystkich fragmentów kształtu przez:<br/>
+                - mieszanie ich ze sobą,<br/>
+                - testowanie bufora głębokości dla każdego fragmentu,<br/>
+                - testowanie bufora szablonowego dla poszczególnych fragmentów.<br/>
+            </Fragment>
+    }, {
+        title: '32. Vertex Shader',
+        content:
+            <Fragment>
+                Jest programem karty graficznej, który przetwarza każdy wierzchołek i jego atrybuty w kolejności ich występowanie w wektorze wierzchołków. Jego obowiązkiem jest obliczenie końcowego położenia wierzchołków we współrzędnych urządzenia i przekazanie wymaganych  danych do shadera fragmentów. Dlatego właśnie tutaj zachodzą wszelkie przekształcenia obiektów w przestrzeni 3D i ich rzutowanie do 2D. Shader fragmentów wymaga atrybutów, takich jak kolor czy współrzędne tekstury, które zwykle są przekazywane przez shader wierzchołków z wejścia na wyjście bez żadnych zmian.
+            </Fragment>
+    }, {
+        title: '33. Fragment Shader',
+        content:
+            <Fragment>
+                Dane wyjściowe z modułu shadera wierzchołków podlegają interpolacji do wszystkich pikseli ekranu pokrytych przez prymityw w procesie zwanym rasteryzacja. Piksele te są nazywane fragmentami i są obiektami, na których działa shader fragmentów. Podobnie jak shader wierzchołków generuje on na wyjściu jeden obowiązkowy atrybut - końcowy kolor fragmentu. Do programisty należy utworzenie kodu generującego ten kolor na podstawie:<br/>
+                · koloru wierzchołków,<br/>
+                · współrzędnych tekstury<br/>
+                · innych danych pochodzących z modułu shadera wierzchołków.
+            </Fragment>
+    }, {
+        title: '34. Vertex Buffer Object',
+        content:
+            <Fragment>
+                Bufor zawierający wektor ze współrzędnymi wszystkich wierzchołków, wraz z ich atrybutami. Vertex Buffer Object powstaje w momencie ładowania danych dotyczących wierzchołków do pamięci karty graficznej.
+            </Fragment>
+    }, {
+        title: '35. Element Buffer Object',
+        content:
+            <Fragment>
+                Bufor zawierający indeksy wierzchołków, który pozwala kontrolować kolejność ich wyświetlania, oraz pozwala na ponowne użycie raz zdefiniowanego wierzchołka. Tablica elementów jest wypełniona liczbami całkowitymi bez znaku, które odnoszą się do wierzchołków związanych z GL_ARRAY_BUFFER. Element Buffer Object powstaje, gdy elementy są ładowane do pamięci karty graficznej. Aby skorzystać z tego bufora, przy rysowaniu należy wykorzystać polecenie glDrawElements, zamiast glDraw Arrays.
+            </Fragment>
     }
-    // , {
-    //     title: '20. Modele barw',
-    //     content:
-    //         <Fragment>
-
-    //         </Fragment>
-    // }
 ]

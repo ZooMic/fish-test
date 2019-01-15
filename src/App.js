@@ -10,6 +10,7 @@ class App extends Component {
       data: [...data],
       selected: Math.floor(Math.random() * data.length),
       isContent: false,
+      isDocument: false,
     };
   }
 
@@ -37,31 +38,58 @@ class App extends Component {
     });
   }
 
+  onDocument = () => {
+    this.setState({
+      isDocument: !this.state.isDocument,
+    });
+  }
+
   render() {
     const {
       onCorrect,
       onIncorrect,
       onReverse,
-      state: { data, selected, isContent },
+      onDocument,
+      state: { data, selected, isContent, isDocument },
     } = this;
 
-    return (
-      <div className="App">
-        {data.length > 0 ?
-        <div className="Fish" onClick={onReverse}>
-          <h1 className="Fish-title">{data[selected].title}</h1>
-          {isContent ?
-          <div className="Fish-content">
-            {data[selected].content}
-          </div> : null}
-        </div> : <div>Success, you finished it all!</div>}
-        <div className="Menu">
-          <button className="correct" onClick={onCorrect}>Correct</button>
-          <span className="items-left">{data.length}</span>
-          <button className="incorrect" onClick={onIncorrect}>Incorrect</button>
+
+    if (isDocument) {
+      return (
+        <div className="App">
+          <button className="all-size" onClick={onDocument}>Quiz</button>
+            {
+              data.map((item, id) => (
+                <div className="Fish" onClick={onReverse} key={`fish-${id}`}>
+                  <h1 className="Fish-title">{item.title}</h1>
+                  <div className="Fish-content">
+                    {item.content}
+                  </div>
+                </div>
+                ))
+            }
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="App">
+          <button className="all-size" onClick={onDocument}>Document</button>
+          {data.length > 0 ?
+          <div className="Fish" onClick={onReverse}>
+            <h1 className="Fish-title">{data[selected].title}</h1>
+            {isContent ?
+            <div className="Fish-content">
+              {data[selected].content}
+            </div> : null}
+          </div> : <div>Success, you finished it all!</div>}
+          <div className="Menu">
+            <button className="correct" onClick={onCorrect}>Correct</button>
+            <span className="items-left">{data.length}</span>
+            <button className="incorrect" onClick={onIncorrect}>Incorrect</button>
+          </div>
+        </div>
+      );
+    }    
   }
 }
 
